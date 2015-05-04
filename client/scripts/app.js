@@ -36,7 +36,6 @@ app.fetch = function(message, data){
   var result = $.ajax({ 
         type: "GET",
         url: app.server,
-       
         data: JSON.stringify(message),
         success: function(returnedData){
           return returnedData;
@@ -48,7 +47,18 @@ app.fetch = function(message, data){
 
 }
 
+app.clearMessages = function(){
+  $('#chats').text('')
+}
 
+app.addMessage = function(message){
+  // look into how to properly append
+  $('#chats').append('<div class="message">'+ JSON.stringify(message) +'</div>')
+}
+
+app.addRoom = function(roomName){
+  $('#roomSelect').append('<div class="rooms">' + JSON.stringify(roomName) + '</div>')
+}
 
 
 
