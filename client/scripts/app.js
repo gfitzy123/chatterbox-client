@@ -84,7 +84,7 @@ app.addRoom = function(roomName){
 
 app.addFriend = function($userNameContext){
   var boldUser = $userNameContext.parent('div[username]').attr('username')
-  $("div.message:contains('" + boldUser + "')").css('font-weight','bold')
+  $("div[username='" + boldUser + "']").css('font-weight','bold')
 }
 
 app.init()
