@@ -48,8 +48,10 @@ body {
 
 .inputbox {
     position:fixed;
+    margin-right: 50px;
     top:0%;
-    left:10%;
+    left:6%;
+    width: 200px;
 }
 form {
     float:right;
@@ -57,14 +59,36 @@ form {
     padding-left: 0;
     margin-bottom: 20px;
 }
-
-form input[type=text] {
+/*form input[type=textarea]*/
+form input[type=textarea] {
     margin-right: 10px;
-    width: 70%;
+    /*width: 70%;*/
     font-size: 12px;
     padding: 5px;
 }
 
+textarea{
+    margin-right: 10px;
+    /*width: 70%;*/
+    font-size: 12px;
+    padding: 5px;
+    resize: vertical; 
+
+}
+
+.submit {
+    background-color:#dcdcdc;
+    border-radius: 15px;
+    width: 82px;
+    margin-left: 50%;
+    font-size: 25px;
+
+}
+
+.submit:hover{
+    cursor: pointer;
+    background-color: orange;
+    }
 
 .chats{
     margin-top: 200px;

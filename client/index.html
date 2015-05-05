@@ -17,8 +17,12 @@
         <h1>chatterbox</h1>
       <div class='inputbox'>
         <form>
-          <input type="input" placeholder="Username" name='username_submit'></input><br><br>
-          <input type="password" placeholder="Password" name='password_submit'></input>
+          <input class='loginName' type="input" placeholder="Username" name='username_submit'>
+          </input><br><br>
+          <!--
+          <input type="password" placeholder="Password" name='password_submit'></input> -->
+          <textarea class='inputMessage' type="textarea" placeholder="Enter Message" value=''></textarea>
+          <div class="submit">Submit</div>
         </form>
       </div>
       <div id='roomSelect'></div>

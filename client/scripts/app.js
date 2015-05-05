@@ -3,6 +3,7 @@
 
 
 var app = {
+  currentroom : 'FIXME!',
   server: 'https://api.parse.com/1/classes/chatterbox',
 }
 app.init = function(){
@@ -12,6 +13,18 @@ $(document).ready(function(){
     console.log('clicked the '+ this)
     app.addFriend($(this))
   });
+
+  $('.submit').on('click', function(){
+    var inputMessage = $('.inputMessage').val();
+    var userName = $('.loginName').val();
+    if(inputMessage && userName){
+    app.addMessage({ username : userName,
+                     text : inputMessage,
+                     roomname : app.currentroom  })
+    $('.inputMessage').val('')
+    
+  }
+  })
 });
 
 }
@@ -61,6 +74,7 @@ app.clearMessages = function(){
 }
 
 app.addMessage = function(message){
+
   // look into how to properly append
   var $chats = $('#chats')
   var $messageContainer = $('<div class="chat"></div>')
