@@ -1,4 +1,14 @@
 // YOUR CODE HERE:
+// TODO:
+// Craft GET / POST messages
+// and callback handling
+//  load previous room list
+//  load previous room messages
+//  create new room
+//  create friend list
+//
+//  setInterval? for refresh
+//  refresh on addMessage
 
 
 
@@ -22,7 +32,7 @@ $(document).ready(function(){
                      text : inputMessage,
                      roomname : app.currentroom  })
     $('.inputMessage').val('')
-    
+
   }
   })
 });
