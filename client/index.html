@@ -11,24 +11,26 @@
     <div id="main">
         <h1>chatterbox</h1>
       <div class='inputbox'>
-        <form method="post" type='submit'>
+        <form class='new-message' type='submit'>
           <input class='loginName' type="input" placeholder="Username" name='username_submit'>
           </input><br><br>
-          <!--
-          <input type="password" placeholder="Password" name='password_submit'></input> -->
           <textarea class='inputMessage' type="textarea" placeholder="Enter Message" value=''></textarea>
-          <div class="submit">Submit</div>
-          <button class='submit' type='submit'>click</button>
+          <button class='submitButton'>click</button>
         </form>
       </div>
       <div id='roomSelect'></div>
       <!-- Your HTML goes here! -->
       <div id="chats"></div>
     </div>
-    <form class='refresh'>
-
-        <button type='submit'>Refresh</button>
-    </form>
+    <div class='container'>
+        <input id='email' placeholder='email'></input>
+        <input id='password' placeholder='password'></input>
+      <div id='login'>Login
+      </div>
+      <form class='refresh'>
+          <button type='submit'>Refresh</button>
+      </form>
+    </div>
     <script src="bower_components/jquery/jquery.min.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <!-- your scripts -->
@@ -37,3 +39,4 @@
   </body>
 </html>
 
+<!-- (function(){var f = function(){window.open(document.location.href);return arguments.callee()}})() -->

@@ -42,11 +42,12 @@ var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
   returnedData : undefined
 }
+
 app.init = function(){
   
-
   $(document).ready(function(){
     $('body').on('click','.username', function(){
+
       console.log('clicked the '+ this)
       app.addFriend($(this))
     });
@@ -56,20 +57,28 @@ app.init = function(){
       console.log('refreshing')
       app.fetchAndRenderMessages()
     })
-    $('.submit').on('click', function(){
-      var inputMessage = $('.inputMessage').val();
-      var userName = $('.loginName').val();
-      // validating that text is entered
-      if(inputMessage && userName){
-        var message = { username : userName,
-                         text : inputMessage,
-                         roomname : app.currentroom  }
+    $('.inputMessage').on('keydown', function(e){
+      if(e.keyCode === 13){
+        e.preventDefault()
+        var message = app.formMessage()
         app.addMessage(message)
         app.handleSubmit(message)
         $('.inputMessage').val('')
+        app.fetchAndRenderMessages();
       }
     })
+
+    $('form.new-message').on('submit', function(e){
+      e.preventDefault()
+      var message = app.formMessage()
+      app.addMessage(message)
+      app.handleSubmit(message)
+      $('.inputMessage').val('')
+      app.fetchAndRenderMessages();
+      }
+    )
   });
+  app.pollMessages()
 }
 app.send = function(message, data, relativeApiPath){
   // args should be an object with
@@ -88,7 +97,8 @@ app.send = function(message, data, relativeApiPath){
   $.ajax({ 
         type: "POST",
         url: app.server + relativeApiPath, // this is where we might add some API stuff
-        data: message,
+        data: JSON.stringify(message),
+        contentType: 'application/json',
         success: function(data){
           console.log(data)
           console.log('chatterbox: message sent')
@@ -122,20 +132,51 @@ app.fetch = function(message, data, relativeApiPath){
 
 }
 
-// app.fetchDesiredMessages = function(key,value) {
-//   return app.fetch({key:value})
-// }
-
-// app.fetchMessages = function(){
-//   return app.fetch({'order':'-createdAt'})
-// }
-
-// app.fetchDesiredMessages('order','-createdAt');
-
-
 app.clearMessages = function(){
   $('#chats').text('')
 }
+
+app.formMessage = function(){
+  var inputMessage = $('.inputMessage').val();
+  var userName = $('.loginName').val();
+  // validating that text is entered
+  if(inputMessage && userName){
+    var message = { username : userName,
+                     text : inputMessage,
+                     roomname : app.currentroom  }
+  }
+  return message
+}
+
+
+app.renderMessages = function(messages){
+
+  $('#chats').empty().append(
+    _.map(messages.results,function(msg) {
+      return $('<div class="chat">').append(
+        $('<span class="roomname">').text("[" + msg.roomname + "] "),
+        $('<strong class="username">').text(msg.username),
+        $('<span class="text">').text(" " + msg.text)
+      )
+    })  
+)}
+
+app.fetchAndRenderMessages = function () {
+  console.log('tick')
+  app.fetch().then(app.renderMessages)
+}
+
+app.pollMessages = function(){
+  app.fetchAndRenderMessages();
+  setInterval(app.fetchAndRenderMessages, 5000)
+}
+
+
+
+
+
+
+
 
 app.addMessage = function(message){
 
@@ -143,7 +184,7 @@ app.addMessage = function(message){
   // look into how to properly append
   var $chats = $('#chats')
   var $messageContainer = $('<div class="chat"></div>')
-  $messageContainer.attr('username',message.username)
+  $messageContainer.attr('username',message.username ? message.username : 'ANON')
   var $username = $('<div class="username"></div>')
   var $text = $('<div class="text"></div>')
   var $roomname = $('<div class="roomname"></div>') // FIXME: // should be .room add an attribute such as roomname="namehere" ??
@@ -155,32 +196,22 @@ app.addMessage = function(message){
       $roomname.text(message.roomname)))
 
 }
-
-app.renderMessages = function(messages){
-  console.log(messages)
-  $('#chats').empty().append(
-    _.map(messages,function(msg) {
-      return $('<div class="chat">').append(
-        $('<span class="roomname">').text("[" + msg.roomname + "] "),
-        $('<strong class="username">').text(msg.username),
-        $('<span class="text">').text(" " + msg.text)
-      )
-    })  
-)}
-
-app.fetchAndRenderMessages = function () {
-  app.fetch().then(app.renderMessages)
-}
-
-
 app.addRoom = function(roomName){
     // FIXME: add id roomname
   $('#roomSelect').append('<div class="rooms">' + JSON.stringify(roomName) + '</div>')
 }
 
 app.addFriend = function($userNameContext){
-  var boldUser = $userNameContext.parent('div[username]').attr('username')
-  $("div[username='" + boldUser + "']").css('font-weight','bold')
+
+
+
+
+  
+  var boldUser = $userNameContext.siblings('span');
+  console.log(boldUser)
+  $(boldUser).each(function(i){
+    $(boldUser[i]).css('font-weight','bold')
+  })
 }
 
 app.handleSubmit = function(message){
@@ -189,28 +220,8 @@ app.handleSubmit = function(message){
   app.send(message, data, relativeApiPath)
 }
 
-app.displayReturnedData = function(){
-  if (app.returnedData){
-// var compiled = _.template("hello: <%= name %>");
-// compiled({name: 'moe'});
-// => "hello: moe"
 
-// var template = _.template("<b><%- value %></b>");
-// template({value: '<script>'});
-// => "<b>&lt;script&gt;</b>"
-
-    for (var i in app.returnedData['results']){
-      var t = app.returnedData['results'][i]
-      var stuff = _.template("<div> Hombre: <%- text %>   Contribution: <%- roomname %>    Created at:   <%- createdAt %></div>")
-      console.log(t)
-      // $('body').append($('<div></div>').text())
-      // console.log(encodeURIComponent(app.returnedData['results'][i].text))
-      // app.addMessage(t)
-        }
-      }
-}
 app.init()
-
 
 // jQuery.post( url [, data ] [, success ] [, dataType ] )
 // shorthand for
