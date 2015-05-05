@@ -46,7 +46,13 @@ body {
     line-height: 13px;
 }
 
+.inputbox {
+    position:fixed;
+    top:0%;
+    left:10%;
+}
 form {
+    float:right;
     padding: 20px;
     padding-left: 0;
     margin-bottom: 20px;
@@ -57,6 +63,11 @@ form input[type=text] {
     width: 70%;
     font-size: 12px;
     padding: 5px;
+}
+
+
+.chats{
+    margin-top: 200px;
 }
 
 .chat {
@@ -71,6 +82,7 @@ form input[type=text] {
 
 .chat:hover {
     background-color: #ddd;
+    cursor: pointer;
 }
 
 .spinner {

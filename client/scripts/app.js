@@ -63,7 +63,7 @@ app.clearMessages = function(){
 app.addMessage = function(message){
   // look into how to properly append
   var $chats = $('#chats')
-  var $messageContainer = $('<div class="message"></div>')
+  var $messageContainer = $('<div class="chat"></div>')
   $messageContainer.attr('username',message.username)
   var $username = $('<div class="username"></div>')
   var $text = $('<div class="text"></div>')
