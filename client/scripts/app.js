@@ -1,5 +1,6 @@
 // YOUR CODE HERE:
 // TODO:
+
 // preload lobby as default
 // return lobby messages
 // return unique roomnames
@@ -9,32 +10,12 @@
 //  create new room
 //  create friend list
 //
-//  setInterval? for refresh
-//  refresh on addMessage
 
-// Craft GET / POST messages
-// and callback handling
 
-// // solution 2
-// function escapeHTML(s) { 
-//     return s.replace(/&/g, '&amp;')
-//             .replace(/"/g, '&quot;')
-//             .replace(/</g, '&lt;')
-//             .replace(/>/g, '&gt;');
-// }
-
-// solution 1
-// var escape = document.createElement('textarea');
-// function escapeHTML(html) {
-//     escape.innerHTML = html;
-//     return escape.innerHTML;
-// }
-
-// function unescapeHTML(html) {
-//     escape.innerHTML = html;
-//     return escape.value;
-// }
-
+// The idea here is to get a basic idea of how to
+// create an object structure to interact and log
+// users, friends, and related functions between
+// the two.
 var users = {'JohnSnow' :{
                         'uid':1,
                         'friendlist':{'gretchin':{'uid':3}},
@@ -69,10 +50,6 @@ app.init = function(){
   
   $(document).ready(function(){
 
-
-
-
-
   $("#login").click(function(){
     var email = $("#email").val();
     var password = $("#password").val();
@@ -82,34 +59,13 @@ app.init = function(){
 
         $('input[type="text"],input[type="password"]').css("box-shadow","0 0 3px red");
 
-        alert("Please fill all fields...!!!!!!");
+        alert("Some fields were empty.");
       }else {
-        // $.post("login.php",{ email1: email, password1:password},
-        // function(data) {
-        // if(data=='Invalid Email.......') {
-        //   $('input[type="text"]').css({"border":"2px solid red","box-shadow":"0 0 3px red"});
-        //   $('input[type="password"]').css({"border":"2px solid #00F5FF","box-shadow":"0 0 5px #00F5FF"});
-        //   alert(data);
-        // }else if(data=='Email or Password is wrong...!!!!'){
-        //   $('input[type="text"],input[type="password"]').css({"border":"2px solid red","box-shadow":"0 0 3px red"});
-        //   alert(data);
-        // } else if(data=='Successfully Logged in...'){
-        //   $("form")[0].reset();
-        //   $('input[type="text"],input[type="password"]').css({"border":"2px solid #00F5FF","box-shadow":"0 0 5px #00F5FF"});
-        //   alert(data);
-        // } else{
-        //   alert(data);
-        // }
+        // here we would do the login process
+        // if email && password
         console.log(email, password)
-        // });
       }
     });
-
-
-
-
-
-
 
     $('body').on('click','.username', function(){
 
@@ -146,22 +102,12 @@ app.init = function(){
   app.pollMessages()
 }
 app.send = function(message, data, relativeApiPath){
-  // args should be an object with
-  // keys:
-  //      type
-  //      data
-  //      url
-  //      callback
-  // if (!args['type'] || !args['data'] || !args['url']){
-  //   return Error('oops missing some args "type", "data", "url"')
-  // }
-
   // check if send request contains a relative path API call
   // else default appends to 'app.server'
   relativeApiPath ? relativeApiPath : relativeApiPath = ''
   $.ajax({ 
         type: "POST",
-        url: app.server + relativeApiPath, // this is where we might add some API stuff
+        url: app.server + relativeApiPath,
         data: JSON.stringify(message),
         contentType: 'application/json',
         success: function(data){
@@ -176,19 +122,13 @@ app.send = function(message, data, relativeApiPath){
 
 
 app.fetch = function(message, data, relativeApiPath){
-  // check if fetch request contains a relative API call
-  // else default
-  // app.fetch({'order':'-createdAt', 'where':'={"$gt":"thing"}')
   relativeApiPath ? relativeApiPath : relativeApiPath = '?order=-createdAt'
   return $.ajax({ 
         type: "GET",
         url: app.server + relativeApiPath,
         data: message,
         success: function(returnedData){
-          //console.log(returnedData)
-          //app.returnedData = returnedData
           return returnedData
-          //return returnedData;
         },
         error: function(data){
           console.log('oops: chatterbox boxchattered')
@@ -233,19 +173,12 @@ app.fetchAndRenderMessages = function () {
 
 app.pollMessages = function(){
   app.fetchAndRenderMessages();
-  setInterval(app.fetchAndRenderMessages, 5000)
+  setInterval(app.fetchAndRenderMessages, 20000)
 }
 
 
 
-
-
-
-
-
 app.addMessage = function(message){
-
-
   // look into how to properly append
   var $chats = $('#chats')
   var $messageContainer = $('<div class="chat"></div>')
@@ -268,10 +201,6 @@ app.addRoom = function(roomName){
 
 app.addFriend = function($userNameContext){
 
-
-
-
-
   var boldUser = $userNameContext.siblings('span');
   console.log(boldUser)
   $(boldUser).each(function(i){
@@ -287,13 +216,3 @@ app.handleSubmit = function(message){
 
 
 app.init()
-
-// jQuery.post( url [, data ] [, success ] [, dataType ] )
-// shorthand for
-// $.ajax({
-//   type: "POST",
-//   url: url,
-//   data: data,
-//   success: success,
-//   dataType: dataType
-// });
