@@ -75,13 +75,27 @@ textarea{
     resize: vertical; 
 
 }
+.refresh{
+     position:fixed;
+     top: 10%;
+     right: 5%;
+     display: inline;
+    background-color:#dcdcdc;
+    border-radius: 3px;
+    width: 82px;
+    font-size: 20px;
+}
 
+.refresh:hover{
+    background-color: yellow;
+    cursor: pointer;
+}
 .submit {
     background-color:#dcdcdc;
-    border-radius: 15px;
-    width: 82px;
+    border-radius: 3px;
+    width: 65px;
     margin-left: 50%;
-    font-size: 25px;
+    font-size: 20px;
 
 }
 
