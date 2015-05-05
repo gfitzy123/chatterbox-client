@@ -9,20 +9,21 @@
     <script src="bower_components/jquery/jquery.min.js"></script>
     <script src="bower_components/underscore/underscore.js"></script>
     <!-- your scripts -->
-    <script src="env/config.js"></script>
+    <script src="env/config.example.js"></script>
     <script src="scripts/app.js"></script>
   </head>
   <body>
     <div id="main">
         <h1>chatterbox</h1>
       <div class='inputbox'>
-        <form>
+        <form method="post" type='submit'>
           <input class='loginName' type="input" placeholder="Username" name='username_submit'>
           </input><br><br>
           <!--
           <input type="password" placeholder="Password" name='password_submit'></input> -->
           <textarea class='inputMessage' type="textarea" placeholder="Enter Message" value=''></textarea>
           <div class="submit">Submit</div>
+          <button class='submit' type='submit'>click</button>
         </form>
       </div>
       <div id='roomSelect'></div>

@@ -1,8 +1,12 @@
 // YOUR CODE HERE:
 // TODO:
+// preload lobby as default
+// return lobby messages
+// return unique roomnames
+//  load previous room list
+
 // Craft GET / POST messages
 // and callback handling
-//  load previous room list
 //  load previous room messages
 //  create new room
 //  create friend list
@@ -17,28 +21,29 @@ var app = {
   server: 'https://api.parse.com/1/classes/chatterbox',
 }
 app.init = function(){
+  app.fetch({'order':'-updatedAt'})
+  $(document).ready(function(){
+    $('body').on('click','.username', function(){
+      console.log('clicked the '+ this)
+      app.addFriend($(this))
+    });
 
-$(document).ready(function(){
-  $('body').on('click','.username', function(){
-    console.log('clicked the '+ this)
-    app.addFriend($(this))
+    $('.submit').on('click', function(){
+      var inputMessage = $('.inputMessage').val();
+      var userName = $('.loginName').val();
+      // validating that text is entered
+      if(inputMessage && userName){
+        var message = { username : userName,
+                         text : inputMessage,
+                         roomname : app.currentroom  }
+        app.addMessage(message)
+        app.handleSubmit(message)
+        $('.inputMessage').val('')
+      }
+    })
   });
-
-  $('.submit').on('click', function(){
-    var inputMessage = $('.inputMessage').val();
-    var userName = $('.loginName').val();
-    if(inputMessage && userName){
-    app.addMessage({ username : userName,
-                     text : inputMessage,
-                     roomname : app.currentroom  })
-    $('.inputMessage').val('')
-
-  }
-  })
-});
-
 }
-app.send = function(message, data){
+app.send = function(message, data, relativeApiPath){
   // args should be an object with
   // keys:
   //      type
@@ -49,11 +54,15 @@ app.send = function(message, data){
   //   return Error('oops missing some args "type", "data", "url"')
   // }
 
+  // check if send request contains a relative path API call
+  // else default appends to 'app.server'
+  relativeApiPath ? relativeApiPath : relativeApiPath = ''
   $.ajax({ 
         type: "POST",
-        url: app.server, // this is where we might add some API stuff
-        data: JSON.stringify(message),
+        url: app.server + relativeApiPath, // this is where we might add some API stuff
+        data: message,
         success: function(data){
+          console.log(data)
           console.log('chatterbox: message sent')
         },
         error: function(data){
@@ -63,13 +72,17 @@ app.send = function(message, data){
 }
 
 
-app.fetch = function(message, data){
-
+app.fetch = function(message, data, relativeApiPath){
+  // check if fetch request contains a relative API call
+  // else default
+  relativeApiPath ? relativeApiPath : relativeApiPath = ''
+  debugger;
   var result = $.ajax({ 
         type: "GET",
-        url: app.server,
-        data: JSON.stringify(message),
+        url: app.server + relativeApiPath,
+        data: message,
         success: function(returnedData){
+          console.log(returnedData)
           return returnedData;
         },
         error: function(data){
@@ -111,6 +124,11 @@ app.addFriend = function($userNameContext){
   $("div[username='" + boldUser + "']").css('font-weight','bold')
 }
 
+app.handleSubmit = function(message){
+  var data = 'FIXME' // [u'username', u'objectId', u'text', u'roomname', u'updatedAt', u'createdAt']
+  var relativeApiPath = undefined // FIXME
+  app.send(message, data, relativeApiPath)
+}
 app.init()
 
 
