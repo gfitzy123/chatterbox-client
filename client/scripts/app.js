@@ -73,7 +73,8 @@ app.init = function(){
       console.log('clicked the '+ this)
       app.addFriend($(this))
     });
-
+    // On pressing "enter" submit ".inputMessage" to
+    // server and window 
     $('.inputMessage').on('keydown', function(e){
       if(e.keyCode === 13){
         e.preventDefault()
@@ -84,7 +85,8 @@ app.init = function(){
         app.fetchAndRenderMessages();
       }
     })
-
+    // On clicking/pressing "enter" submit new
+    // message
     $('form.new-message').on('submit', function(e){
       e.preventDefault()
       var message = app.formMessage()
@@ -95,11 +97,15 @@ app.init = function(){
       }
     )
   });
+  // begin setInterval to pull in new
+  // messages
   app.pollMessages()
 }
+
 app.send = function(message, data, relativeApiPath){
   // check if send request contains a relative path API call
-  // else default appends to 'app.server'
+  // or ObjectID
+  // else default to 'app.server'
   relativeApiPath ? relativeApiPath : relativeApiPath = ''
   $.ajax({ 
         type: "POST",
@@ -118,13 +124,16 @@ app.send = function(message, data, relativeApiPath){
 
 
 app.fetch = function(message, data, relativeApiPath){
+  // check if check request contains a relative path API call
+  // or ObjectID
+  // else default to 'order=-createdAt' (ordered messages by createdAt date)
   relativeApiPath ? relativeApiPath : relativeApiPath = '?order=-createdAt'
   return $.ajax({ 
         type: "GET",
         url: app.server + relativeApiPath,
         data: message,
         success: function(returnedData){
-          return returnedData
+          return returnedData;
         },
         error: function(data){
           console.log('oops: chatterbox boxchattered')
@@ -138,6 +147,8 @@ app.clearMessages = function(){
 }
 
 app.formMessage = function(){
+  // create a message object from the
+  // ".inputbox" 
   var inputMessage = $('.inputMessage').val();
   var userName = $('.loginName').val();
   // validating that text is entered
@@ -151,7 +162,13 @@ app.formMessage = function(){
 
 
 app.renderMessages = function(messages){
+  // given a messages array
+  // filled with Objects
+  // maps "messages.results" and
+  // returns the sanitized jQuery text
 
+  // TODO ???
+  // check if msg.roomname && msg.username && msg.text
   $('#chats').empty().append(
     _.map(messages.results,function(msg) {
       return $('<div class="chat">').append(
@@ -163,11 +180,11 @@ app.renderMessages = function(messages){
 )}
 
 app.fetchAndRenderMessages = function () {
-  console.log('tick')
   app.fetch().then(app.renderMessages)
 }
 
 app.pollMessages = function(){
+  // begin messages refresh
   app.fetchAndRenderMessages();
   setInterval(app.fetchAndRenderMessages, 20000)
 }
@@ -178,6 +195,7 @@ app.addMessage = function(message){
   // look into how to properly append
   var $chats = $('#chats')
   var $messageContainer = $('<div class="chat"></div>')
+  
   $messageContainer.attr('username',message.username ? message.username : 'ANON')
   var $username = $('<div class="username"></div>')
   var $text = $('<div class="text"></div>')
