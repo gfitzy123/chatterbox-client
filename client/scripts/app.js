@@ -49,35 +49,31 @@ var app = {
 app.init = function(){
   
   $(document).ready(function(){
-
+  // login box credentials
   $("#login").click(function(){
     var email = $("#email").val();
     var password = $("#password").val();
     // Checking for blank fields.
       if( email =='' || password ==''){
+        // styling for empty/incorrect entry
         $('input[type="text"],input[type="password"]').css("border","2px solid red");
-
         $('input[type="text"],input[type="password"]').css("box-shadow","0 0 3px red");
-
         alert("Some fields were empty.");
       }else {
+        // TODO
         // here we would do the login process
         // if email && password
         console.log(email, password)
       }
     });
-
+    // TODO
+    // Intention: addFriend to users[user].friendlist
+    // Change styling on click?
     $('body').on('click','.username', function(){
-
       console.log('clicked the '+ this)
       app.addFriend($(this))
     });
 
-    $('form.refresh').on('submit', function(e){
-      e.preventDefault()
-      console.log('refreshing')
-      app.fetchAndRenderMessages()
-    })
     $('.inputMessage').on('keydown', function(e){
       if(e.keyCode === 13){
         e.preventDefault()
