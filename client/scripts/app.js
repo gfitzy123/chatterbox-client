@@ -1,19 +1,4 @@
-// YOUR CODE HERE:
-// TODO:
-
-// preload lobby as default
-// return lobby messages
-// return unique roomnames
-//  load previous room list
-
-//  load previous room messages
-//  create new room
-//  create friend list
-//
-
-
-// The idea here is to get a basic idea of how to
-// create an object structure to interact and log
+// establish a basic object/database schema structure to interact and log
 // users, friends, and related functions between
 // the two.
 var users = {'JohnSnow' :{
@@ -39,7 +24,6 @@ var users = {'JohnSnow' :{
                       }
             }
 
-
 var app = {
   currentroom : 'public',
   server: 'https://api.parse.com/1/classes/chatterbox',
@@ -47,7 +31,7 @@ var app = {
 }
 
 app.init = function(){
-  
+
   $(document).ready(function(){
 
   // login box credentials
@@ -114,6 +98,11 @@ app.ajaxCall = function(message, type, relativeApiPath){
   // or ObjectID
   // else default to 'app.server'
   // relativeApiPath ? relativeApiPath : relativeApiPath = ''
+  //
+  // Example Usage
+  //  See: app.send() OR app.fetch()
+  //  app.fetch({'order':'-createdAt', 'limit':'10'}).then(callback)
+  //  app.fetch().then(app.renderMessages)
   relativeApiPath ? relativeApiPath : relativeApiPath = ''
   if (type === 'POST'){
     message = JSON.stringify(message)
@@ -158,20 +147,21 @@ app.formMessage = function(){
                      text : inputMessage,
                      roomname : app.currentroom  }
   }
-  return message
+  return message;
 }
 
 
 app.renderMessages = function(messages){
-  // given a messages array
-  // filled with Objects
-  // maps "messages.results" and
-  // returns the sanitized jQuery text
+  // renders sanitized jQuery text
+  // being used as a callback i.e.
+  // app.fetch().then(app.renderMessages)
+  // See: function below
 
   // TODO ???
   // check if msg.roomname && msg.username && msg.text
   $('#chats').empty().append(
-    _.map(messages.results,function(msg) {
+    // message ==== [u'results': [msgObject, msgObject, msgObject]]
+    _.map(messages.results, function(msg) {
       return $('<div class="chat">').append(
         $('<span class="roomname">').text("[" + msg.roomname + "] "),
         $('<strong class="username">').text(msg.username),
