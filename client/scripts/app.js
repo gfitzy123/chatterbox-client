@@ -41,7 +41,7 @@ var users = {'JohnSnow' :{
 
 
 var app = {
-  currentroom : 'FIXME!',
+  currentroom : 'public',
   server: 'https://api.parse.com/1/classes/chatterbox',
   returnedData : undefined
 }
@@ -49,6 +49,7 @@ var app = {
 app.init = function(){
   
   $(document).ready(function(){
+
   // login box credentials
   $("#login").click(function(){
     var email = $("#email").val();
@@ -66,6 +67,7 @@ app.init = function(){
         console.log(email, password)
       }
     });
+
     // TODO
     // Intention: addFriend to users[user].friendlist
     // Change styling on click?
@@ -73,6 +75,7 @@ app.init = function(){
       console.log('clicked the '+ this)
       app.addFriend($(this))
     });
+
     // On pressing "enter" submit ".inputMessage" to
     // server and window 
     $('.inputMessage').on('keydown', function(e){
@@ -85,6 +88,7 @@ app.init = function(){
         app.fetchAndRenderMessages();
       }
     })
+
     // On clicking/pressing "enter" submit new
     // message
     $('form.new-message').on('submit', function(e){
@@ -97,24 +101,31 @@ app.init = function(){
       }
     )
   });
+
   // begin setInterval to pull in new
   // messages
   app.pollMessages()
 }
 
-app.send = function(message, data, relativeApiPath){
-  // check if send request contains a relative path API call
+app.ajaxCall = function(message, type, relativeApiPath){
+  // check if type of ('GET', 'POST', ???) 
+  // POST requires a JSON.strinify
+  // request contains a relative path API call
   // or ObjectID
   // else default to 'app.server'
+  // relativeApiPath ? relativeApiPath : relativeApiPath = ''
   relativeApiPath ? relativeApiPath : relativeApiPath = ''
-  $.ajax({ 
-        type: "POST",
+  if (type === 'POST'){
+    message = JSON.stringify(message)
+  }
+  return $.ajax({ 
+        type: type,
         url: app.server + relativeApiPath,
-        data: JSON.stringify(message),
+        data: message,
         contentType: 'application/json',
         success: function(data){
-          console.log(data)
           console.log('chatterbox: message sent')
+          return data
         },
         error: function(data){
           console.log('oops: chatterbox boxchattered')
@@ -122,23 +133,13 @@ app.send = function(message, data, relativeApiPath){
       })
 }
 
+app.send = function(message, relativeApiPath){
+  return app.ajaxCall(message,'POST', relativeApiPath)
+}
 
-app.fetch = function(message, data, relativeApiPath){
-  // check if check request contains a relative path API call
-  // or ObjectID
-  // else default to 'order=-createdAt' (ordered messages by createdAt date)
-  relativeApiPath ? relativeApiPath : relativeApiPath = '?order=-createdAt'
-  return $.ajax({ 
-        type: "GET",
-        url: app.server + relativeApiPath,
-        data: message,
-        success: function(returnedData){
-          return returnedData;
-        },
-        error: function(data){
-          console.log('oops: chatterbox boxchattered')
-        }
-      })
+
+app.fetch = function(message, relativeApiPath){
+  return app.ajaxCall(message, 'GET', relativeApiPath)
 
 }
 
@@ -192,29 +193,25 @@ app.pollMessages = function(){
 
 
 app.addMessage = function(message){
-  // look into how to properly append
-  var $chats = $('#chats')
-  var $messageContainer = $('<div class="chat"></div>')
-  
-  $messageContainer.attr('username',message.username ? message.username : 'ANON')
-  var $username = $('<div class="username"></div>')
-  var $text = $('<div class="text"></div>')
-  var $roomname = $('<div class="roomname"></div>') // FIXME: // should be .room add an attribute such as roomname="namehere" ??
-
-  $chats.append($messageContainer
-    .append(
-      $username.text(message.username), 
-      $text.text(message.text), 
-      $roomname.text(message.roomname)))
-
+  $('#chats')
+    .append($('<div class="chat"></div>')
+        // check if message.username exists else default to ANON
+        .attr('username',message.username ? message.username : 'ANON')
+    )
+    .append($('<div class="username"></div>').text(message.username), 
+            $('<div class="text"></div>').text(message.text), 
+            $('<div class="roomname"></div>').text(message.roomname)
+    )
 }
+
+//TODO Allows the user to implement a new room of choice
 app.addRoom = function(roomName){
-    // FIXME: add id roomname
   $('#roomSelect').append('<div class="rooms">' + JSON.stringify(roomName) + '</div>')
 }
 
+//TODO enable the user to add and view an arbitrary number of selected friends
+//include implmenetation of a friends list/container/buttonthing
 app.addFriend = function($userNameContext){
-
   var boldUser = $userNameContext.siblings('span');
   console.log(boldUser)
   $(boldUser).each(function(i){
@@ -222,10 +219,10 @@ app.addFriend = function($userNameContext){
   })
 }
 
+
 app.handleSubmit = function(message){
-  var data = 'FIXME' // [u'username', u'objectId', u'text', u'roomname', u'updatedAt', u'createdAt']
-  var relativeApiPath = undefined // FIXME
-  app.send(message, data, relativeApiPath)
+  var data = 'FIXME missing data?' // [u'username', u'objectId', u'text', u'roomname', u'updatedAt', u'createdAt']
+  app.send(message)
 }
 
 
