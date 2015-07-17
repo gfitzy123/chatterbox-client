@@ -120,6 +120,7 @@ textarea{
     padding: 10px;
 }
 
+<<<<<<< HEAD
 
 .container{
     float: right;
@@ -145,4 +146,13 @@ textarea{
 .refresh:hover{
     background-color: yellow;
     cursor: pointer;
+=======
+.button {
+    font-style: normal;
+
+}
+
+.p {
+    font-style: normal;
+>>>>>>> 435cdf4500258f238179a5b6507f2f215e05414b
 }
