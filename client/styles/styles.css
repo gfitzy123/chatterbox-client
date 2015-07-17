@@ -46,17 +46,53 @@ body {
     line-height: 13px;
 }
 
+.inputbox {
+    position:fixed;
+    margin-right: 50px;
+    top:0%;
+    left:6%;
+    width: 200px;
+}
 form {
+    float:right;
     padding: 20px;
     padding-left: 0;
     margin-bottom: 20px;
 }
-
-form input[type=text] {
+/*form input[type=textarea]*/
+form input[type=textarea] {
     margin-right: 10px;
-    width: 70%;
+    /*width: 70%;*/
     font-size: 12px;
     padding: 5px;
+}
+
+textarea{
+    margin-right: 10px;
+    /*width: 70%;*/
+    font-size: 12px;
+    padding: 5px;
+    resize: vertical; 
+
+}
+
+
+.submit {
+    background-color:#dcdcdc;
+    border-radius: 3px;
+    width: 65px;
+    margin-left: 50%;
+    font-size: 20px;
+
+}
+
+.submit:hover{
+    cursor: pointer;
+    background-color: orange;
+    }
+
+.chats{
+    margin-top: 200px;
 }
 
 .chat {
@@ -71,6 +107,7 @@ form input[type=text] {
 
 .chat:hover {
     background-color: #ddd;
+    cursor: pointer;
 }
 
 .spinner {
@@ -81,4 +118,31 @@ form input[type=text] {
 
 .spinner img {
     padding: 10px;
+}
+
+
+.container{
+    float: right;
+    height: 150px;
+    width: 200px;
+    position:fixed;
+     top: 10%;
+     right: 5%;
+     display: inline;
+    background-color:#dcdcdc;
+    border-radius: 2000px;
+    font-size: 20px;
+}
+#login {
+    height:30px;
+    width: 60px;
+    right: 0px;
+}
+#login:hover {
+    background-color: green;
+    cursor: pointer; 
+}
+.refresh:hover{
+    background-color: yellow;
+    cursor: pointer;
 }
